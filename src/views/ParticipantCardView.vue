@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { PageHeader, Badge, PrimaryButton, InfoRow, EntityLinkRow, CarMiniCard, Section, Avatar, stars, ICONS, roleTone, BottomNav } from '@/components/ui'
+import { PageHeader, Badge, PrimaryButton, EditableField, EntityLinkRow, CarMiniCard, Section, Avatar, stars, ICONS, roleTone, BottomNav } from '@/components/ui'
 
 const router = useRouter()
+const isModerator = true
+const editing = ref(false)
+const roleOptions = ['Внешний', 'Гость', 'Пользователь', 'Участник', 'Модератор', 'Админ']
 
-const participant = {
+const participant = reactive({
   name: 'Иван Петров',
   username: 'ivan_cabrio',
   role: 'Участник',
@@ -29,12 +33,36 @@ const participant = {
     { id: 2, title: 'СТО «АвтоПро»', rating: 4 },
     { id: 3, title: 'Шиномонтаж «Колесо»', rating: 5 },
   ],
+})
+let snapshot = { ...participant }
+
+function openTelegram() {
+  window.open(`https://t.me/${participant.username}`, '_blank')
+}
+function startEdit() {
+  snapshot = { ...participant }
+  editing.value = true
+}
+function cancelEdit() {
+  Object.assign(participant, snapshot)
+  editing.value = false
+}
+function saveEdit() {
+  editing.value = false
 }
 </script>
 
 <template>
   <div class="page-shell pb-16">
-    <PageHeader />
+    <PageHeader>
+      <template #actions>
+        <div v-if="editing" class="flex gap-1.5">
+          <button class="text-meta font-semibold text-muted px-2" @click="cancelEdit">Отмена</button>
+          <button class="text-meta font-semibold text-accent px-2" @click="saveEdit">Сохранить</button>
+        </div>
+        <button v-else-if="isModerator" class="text-meta font-semibold text-accent2 px-2" @click="startEdit">Изменить</button>
+      </template>
+    </PageHeader>
 
     <div class="flex items-center gap-2.5">
       <Avatar :src="participant.avatar" :size="48" />
@@ -47,17 +75,34 @@ const participant = {
           @{{ participant.username }} · {{ participant.city }} · с {{ participant.joinDate }}
         </div>
       </div>
-      <PrimaryButton label="Написать" size="sm" />
+      <PrimaryButton label="Написать" size="sm" @click="openTelegram" />
+    </div>
+
+    <div v-if="isModerator" class="card mt-2.5 px-3 py-2">
+      <div class="text-meta text-muted mb-1">Роль участника</div>
+      <select
+        :disabled="!editing"
+        v-model="participant.role"
+        class="w-full bg-surface2 rounded-lg px-2 py-1.5 text-body text-text outline-none disabled:opacity-60"
+      >
+        <option v-for="r in roleOptions" :key="r" :value="r">{{ r }}</option>
+      </select>
     </div>
 
     <div class="card mt-2.5">
-      <InfoRow label="Город" :value="participant.city" />
-      <InfoRow label="Страна" :value="participant.country" />
-      <InfoRow label="Телефон" :value="participant.phone" />
-      <InfoRow label="Почта" :value="participant.email" />
+      <EditableField label="Город" v-model="participant.city" :editing="editing" />
+      <EditableField label="Страна" v-model="participant.country" :editing="editing" />
+      <EditableField label="Телефон" v-model="participant.phone" :editing="editing" />
+      <EditableField label="Почта" v-model="participant.email" :editing="editing" />
       <div class="px-3 py-1.5">
         <div class="text-meta text-muted mb-0.5">О себе</div>
-        <p class="text-body text-text leading-snug">{{ participant.bio }}</p>
+        <p v-if="!editing" class="text-body text-text leading-snug">{{ participant.bio }}</p>
+        <textarea
+          v-else
+          v-model="participant.bio"
+          rows="3"
+          class="w-full bg-surface2 rounded-lg px-2 py-1.5 text-body text-text outline-none resize-none"
+        />
       </div>
     </div>
 

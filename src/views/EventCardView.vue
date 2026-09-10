@@ -41,6 +41,24 @@ function cancelEdit() {
 function saveEdit() {
   editing.value = false
 }
+function deleteEvent() {
+  if (!confirm('Событие будет помечено как удалённое. Продолжить?')) return
+  editing.value = false
+}
+
+const photoInput = ref<HTMLInputElement | null>(null)
+function pickPhoto() {
+  photoInput.value?.click()
+}
+function onPhotoChange(e: Event) {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = () => {
+    event.photo = reader.result as string
+  }
+  reader.readAsDataURL(file)
+}
 
 const whenLabel = eventWhenLabel(event.dateIso)
 
@@ -105,6 +123,14 @@ const myCaption = computed(() => {
     <figure class="relative rounded-2xl overflow-hidden mb-2.5">
       <img :src="event.photo" class="w-full h-40 object-cover" />
       <Badge v-if="!isNew" :text="event.status" class="absolute top-2 right-2" />
+      <button
+        v-if="editing"
+        class="absolute bottom-2 right-2 bg-bg/80 text-text text-meta font-semibold px-2.5 py-1 rounded-lg"
+        @click="pickPhoto"
+      >
+        📷 Фото
+      </button>
+      <input ref="photoInput" type="file" accept="image/*" class="hidden" @change="onPhotoChange" />
     </figure>
 
     <div class="flex items-center justify-between px-1">
@@ -214,7 +240,15 @@ const myCaption = computed(() => {
       </Section>
     </template>
 
-    <div v-else class="mt-3">
+    <button
+      v-if="!isNew && editing"
+      class="w-full mt-3 py-2.5 rounded-xl bg-rose-500/15 text-rose-400 font-bold text-title active:scale-95 transition-transform"
+      @click="deleteEvent"
+    >
+      Удалить мероприятие
+    </button>
+
+    <div v-if="isNew" class="mt-3">
       <PrimaryButton label="Создать мероприятие" @click="saveEdit" />
     </div>
 

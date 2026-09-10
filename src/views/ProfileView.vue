@@ -46,6 +46,20 @@ function cancelEdit() {
 function saveEdit() {
   editing.value = false
 }
+
+const photoInput = ref<HTMLInputElement | null>(null)
+function pickPhoto() {
+  photoInput.value?.click()
+}
+function onPhotoChange(e: Event) {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = () => {
+    profile.avatar = reader.result as string
+  }
+  reader.readAsDataURL(file)
+}
 </script>
 
 <template>
@@ -65,9 +79,14 @@ function saveEdit() {
     <div class="flex items-center gap-2.5">
       <div class="relative shrink-0">
         <img :src="profile.avatar" class="w-14 h-14 rounded-full object-cover ring-1 ring-accent/40" />
-        <button v-if="editing" class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-accent text-bg text-micro flex items-center justify-center">
+        <button
+          v-if="editing"
+          class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-accent text-bg text-micro flex items-center justify-center"
+          @click="pickPhoto"
+        >
           📷
         </button>
+        <input ref="photoInput" type="file" accept="image/*" class="hidden" @change="onPhotoChange" />
       </div>
       <div class="min-w-0 flex-1">
         <div class="flex items-center gap-1.5 flex-wrap leading-none">
@@ -104,7 +123,7 @@ function saveEdit() {
         <CarMiniCard v-for="c in cars" :key="c.id" :car="c" @click="router.push(`/cars/${c.id}`)" />
         <button
           class="shrink-0 w-24 h-full min-h-[88px] rounded-xl border border-dashed border-white/15 flex flex-col items-center justify-center gap-1 text-muted"
-          @click="router.push('/cars')"
+          @click="router.push('/cars/new')"
         >
           <span class="text-title leading-none">+</span>
           <span class="text-micro text-center leading-tight px-1">Добавить авто</span>
