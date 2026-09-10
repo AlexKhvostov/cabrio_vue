@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { PageHeader, SearchFilterBar, BottomNav } from '@/components/ui'
+import { PageHeader, SearchFilterBar, PrimaryButton, BottomNav } from '@/components/ui'
 import EventListCard from '@/components/EventListCard.vue'
 
 const router = useRouter()
@@ -23,7 +23,10 @@ function openEvent(id: number) {
 <template>
   <div class="page-shell pb-16">
     <PageHeader />
-    <h1 class="text-name font-bold text-text mb-2 px-1">Мероприятия</h1>
+    <div class="flex items-center justify-between mb-2 px-1 gap-2">
+      <h1 class="text-name font-bold text-text">Мероприятия</h1>
+      <PrimaryButton label="+ Новое" size="sm" @click="router.push('/events/new')" />
+    </div>
     <SearchFilterBar v-model="search" placeholder="Поиск по названию..." />
     <EventListCard v-for="e in filtered" :key="e.id" :event="e" @click="openEvent(e.id)" />
     <BottomNav />
