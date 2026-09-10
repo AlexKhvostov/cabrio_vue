@@ -9,6 +9,8 @@ defineEmits<{ back: []; menu: [] }>()
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
     </button>
-    <button class="icon-button text-text text-xs" @click="$emit('menu')">⋯</button>
+    <slot name="actions">
+      <button class="icon-button text-text text-xs" @click="$emit('menu')">⋯</button>
+    </slot>
   </div>
 </template>

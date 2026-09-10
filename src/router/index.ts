@@ -53,6 +53,11 @@ const router = createRouter({
       name: 'service',
       component: () => import('@/views/ServiceCardView.vue'),
     },
+    {
+      path: '/me',
+      name: 'profile',
+      component: () => import('@/views/ProfileView.vue'),
+    },
   ],
 })
 
