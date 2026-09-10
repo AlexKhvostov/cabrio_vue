@@ -20,7 +20,7 @@ function go(path: string) {
 
 <template>
   <nav class="fixed bottom-0 left-0 right-0 bg-surface border-t border-white/5 z-20">
-    <div class="max-w-[420px] mx-auto grid grid-cols-6">
+    <div class="max-w-[420px] mx-auto grid grid-cols-6 px-1.5">
       <button
         v-for="item in items"
         :key="item.name"

@@ -16,7 +16,7 @@ const stats = [
 
 <template>
   <div class="page-shell pb-16">
-    <figure class="relative rounded-2xl overflow-hidden -mx-3 -mt-2 mb-3">
+    <figure class="relative rounded-2xl overflow-hidden mb-3">
       <img
         src="https://images.unsplash.com/photo-1541447271487-09612b3f49f7?w=800&h=450&fit=crop"
         class="w-full h-40 object-cover"
