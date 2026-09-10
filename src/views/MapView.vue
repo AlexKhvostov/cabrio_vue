@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { BottomNav } from '@/components/ui'
+import { BottomNav, Spinner, Toast } from '@/components/ui'
 
 const router = useRouter()
 
@@ -86,9 +86,7 @@ function openProfile(id: number) {
       </button>
     </div>
 
-    <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-bg/40 z-20">
-      <div class="w-8 h-8 rounded-full border-2 border-white/20 border-t-accent animate-spin" />
-    </div>
+    <Spinner v-if="loading" />
 
     <div class="absolute top-3 left-3 right-3 z-10">
       <button
@@ -128,11 +126,7 @@ function openProfile(id: number) {
       <button class="text-meta font-semibold text-accent2 shrink-0" @click="openProfile(selectedPerson.id)">Профиль</button>
     </div>
 
-    <transition name="fade">
-      <div v-if="toastMsg" class="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 px-3 py-1.5 rounded-full bg-surface text-meta text-text shadow">
-        {{ toastMsg }}
-      </div>
-    </transition>
+    <Toast :message="toastMsg" />
 
     <div class="absolute bottom-20 right-3 z-10 flex flex-col gap-2">
       <button
@@ -156,13 +150,3 @@ function openProfile(id: number) {
   </div>
 </template>
 
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

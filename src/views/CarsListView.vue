@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { PageHeader, Section, SearchFilterBar, BottomNav } from '@/components/ui'
+import { PageHeader, Section, SearchFilterBar, FilterSelect, BottomNav } from '@/components/ui'
 import CarListCard from '@/components/CarListCard.vue'
 
 const router = useRouter()
 const search = ref('')
+const statusFilter = ref('Все статусы')
+const statusOptions = [
+  { value: 'Все статусы', label: 'Все статусы' },
+  { value: 'Активен', label: 'Активен' },
+  { value: 'В ремонте', label: 'В ремонте' },
+  { value: 'Продан', label: 'Продан' },
+]
 
 const cars = [
   {
@@ -40,14 +47,24 @@ const cars = [
   },
 ]
 
-const filtered = computed(() => cars.filter((c) => c.name.toLowerCase().includes(search.value.toLowerCase())))
+const filtered = computed(() =>
+  cars.filter(
+    (c) =>
+      c.name.toLowerCase().includes(search.value.toLowerCase()) &&
+      (statusFilter.value === 'Все статусы' || c.status === statusFilter.value)
+  )
+)
 </script>
 
 <template>
   <div class="page-shell pb-16">
     <PageHeader />
     <h1 class="text-name font-bold text-text mb-2 px-1">Автомобили клуба</h1>
-    <SearchFilterBar v-model="search" placeholder="Поиск по модели..." />
+    <SearchFilterBar v-model="search" placeholder="Поиск по модели...">
+      <template #filter>
+        <FilterSelect v-model="statusFilter" :options="statusOptions" />
+      </template>
+    </SearchFilterBar>
     <Section title="Все автомобили" :count="filtered.length">
       <CarListCard v-for="c in filtered" :key="c.id" :car="c" @click="router.push(`/cars/${c.id}`)" />
     </Section>

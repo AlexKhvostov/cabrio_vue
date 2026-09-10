@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { PageHeader, SearchFilterBar, BottomNav } from '@/components/ui'
+import { PageHeader, SearchFilterBar, FilterSelect, BottomNav } from '@/components/ui'
 import MemberListCard from '@/components/MemberListCard.vue'
 
 const router = useRouter()
 const search = ref('')
+const roleFilter = ref('Все роли')
+const roleOptions = [
+  { value: 'Все роли', label: 'Все роли' },
+  { value: 'Пользователь', label: 'Пользователь' },
+  { value: 'Участник', label: 'Участник' },
+  { value: 'Модератор', label: 'Модератор' },
+  { value: 'Админ', label: 'Админ' },
+]
 
 const bmwPhoto = 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=200&h=200&fit=crop'
 const mazdaPhoto = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=200&h=200&fit=crop'
@@ -61,7 +69,11 @@ const members = [
 ]
 
 const filtered = computed(() =>
-  members.filter((m) => (m.name + m.username).toLowerCase().includes(search.value.toLowerCase()))
+  members.filter(
+    (m) =>
+      (m.name + m.username).toLowerCase().includes(search.value.toLowerCase()) &&
+      (roleFilter.value === 'Все роли' || m.role === roleFilter.value)
+  )
 )
 
 function openMember(id: number) {
@@ -73,7 +85,11 @@ function openMember(id: number) {
   <div class="page-shell pb-16">
     <PageHeader />
     <h1 class="text-name font-bold text-text mb-2 px-1">Участники клуба</h1>
-    <SearchFilterBar v-model="search" placeholder="Поиск по имени или нику..." />
+    <SearchFilterBar v-model="search" placeholder="Поиск по имени или нику...">
+      <template #filter>
+        <FilterSelect v-model="roleFilter" :options="roleOptions" />
+      </template>
+    </SearchFilterBar>
     <MemberListCard v-for="m in filtered" :key="m.id" :member="m" @click="openMember(m.id)" />
     <BottomNav />
   </div>
