@@ -23,6 +23,36 @@ const router = createRouter({
       name: 'cars',
       component: () => import('@/views/CarsListView.vue'),
     },
+    {
+      path: '/cars/:id',
+      name: 'car',
+      component: () => import('@/views/CarCardView.vue'),
+    },
+    {
+      path: '/map',
+      name: 'map',
+      component: () => import('@/views/MapView.vue'),
+    },
+    {
+      path: '/events',
+      name: 'events',
+      component: () => import('@/views/EventsListView.vue'),
+    },
+    {
+      path: '/events/:id',
+      name: 'event',
+      component: () => import('@/views/EventCardView.vue'),
+    },
+    {
+      path: '/services',
+      name: 'services',
+      component: () => import('@/views/ServicesListView.vue'),
+    },
+    {
+      path: '/services/:id',
+      name: 'service',
+      component: () => import('@/views/ServiceCardView.vue'),
+    },
   ],
 })
 

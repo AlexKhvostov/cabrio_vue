@@ -4,10 +4,11 @@ import { Avatar, Badge } from '@/components/ui'
 defineProps<{
   car: { name: string; year: number; city: string; owner: string; ownerAvatar: string; photo: string }
 }>()
+defineEmits<{ click: [] }>()
 </script>
 
 <template>
-  <div class="card mb-2.5">
+  <div class="card mb-2.5" @click="$emit('click')">
     <img :src="car.photo" class="w-full h-32 object-cover" />
     <div class="flex items-center justify-between px-3 py-2">
       <div class="min-w-0">

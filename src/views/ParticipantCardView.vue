@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { PageHeader, Badge, PrimaryButton, InfoRow, EntityLinkRow, CarMiniCard, Section, Avatar, stars, ICONS } from '@/components/ui'
+
+const router = useRouter()
 
 const participant = {
   name: 'Иван Петров',
@@ -60,7 +63,7 @@ const participant = {
 
     <Section title="Автомобили" :count="participant.cars.length">
       <div class="flex gap-2 overflow-x-auto scrollbar-hide -mx-1 px-1">
-        <CarMiniCard v-for="c in participant.cars" :key="c.id" :car="c" />
+        <CarMiniCard v-for="c in participant.cars" :key="c.id" :car="c" @click="router.push(`/cars/${c.id}`)" />
       </div>
     </Section>
 
@@ -72,6 +75,7 @@ const participant = {
           :title="e.title"
           :meta="e.date + ' · ' + e.place"
           :icon="ICONS.event"
+          @click="router.push(`/events/${e.id}`)"
         />
       </div>
     </Section>
@@ -84,6 +88,7 @@ const participant = {
           :title="r.title"
           :meta="stars(r.rating)"
           :icon="ICONS.review"
+          @click="router.push(`/services/${r.id}`)"
         />
       </div>
     </Section>
