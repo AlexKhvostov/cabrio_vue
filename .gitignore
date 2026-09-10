@@ -21,3 +21,10 @@ npm-debug.log*
 
 .env
 .env.local
+
+# PHP backend (скопирован из Cabrio_app) - секреты и генерируемые данные
+backend/logs/
+uploads/*
+!uploads/.gitkeep
+vendor/
+composer.lock

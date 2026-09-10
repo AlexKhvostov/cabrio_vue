@@ -1,0 +1,38 @@
+# Security hardening for public web root
+
+# 1) Disable directory listing
+<IfModule mod_autoindex.c>
+  Options -Indexes
+</IfModule>
+
+# 2) Deny access to hidden files (dotfiles) and .env (and similar)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Block any hidden file or directory like .git, .env, .htaccess when requested directly
+  RewriteRule "(^|/)\.[^/]+" - [F]
+
+  # Block sensitive extensions from direct access
+  RewriteRule "\.(env|ini|phps|log|sh|sql|bak|swp|git|hg|yml|yaml|lock)$" - [F,NC]
+
+  # Block backend logs and database scripts from direct web access
+  RewriteRule ^backend/logs/ - [F]
+  RewriteRule ^database/ - [F]
+</IfModule>
+
+# 3) Extra security headers (best-effort)
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "no-referrer-when-downgrade"
+</IfModule>
+
+# включаем модуль перезаписи URL
+RewriteEngine On
+
+# базовый префикс URL = /app/
+RewriteBase /app/
+
+# всё, что начинается с /app/api/…,
+# перенаправляем на backend/routes/api.php
+RewriteRule ^api/.* backend/routes/api.php [L,QSA]
