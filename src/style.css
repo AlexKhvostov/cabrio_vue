@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Manrope:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#app {
+  height: 100%;
+  background-color: #161a2e;
+}
+
+body {
+  font-family: 'Nunito', 'Manrope', system-ui, sans-serif;
+  color: #f4f2ee;
+}
+
+/* Общие переиспользуемые классы-паттерны, единые для всего приложения */
+.page-shell {
+  @apply max-w-[420px] mx-auto min-h-screen pb-8 px-3 pt-2;
+}
+.section-title {
+  @apply text-meta font-semibold text-muted uppercase tracking-wide;
+}
+.card {
+  @apply rounded-xl bg-surface overflow-hidden;
+}
+.icon-button {
+  @apply w-7 h-7 rounded-full bg-surface flex items-center justify-center;
+}
