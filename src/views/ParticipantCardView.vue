@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { PageHeader, Badge, PrimaryButton, InfoRow, EntityLinkRow, CarMiniCard, Section, Avatar, stars, ICONS } from '@/components/ui'
+import { PageHeader, Badge, PrimaryButton, InfoRow, EntityLinkRow, CarMiniCard, Section, Avatar, stars, ICONS, roleTone } from '@/components/ui'
 
 const router = useRouter()
 
@@ -41,7 +41,7 @@ const participant = {
       <div class="min-w-0 flex-1">
         <div class="flex items-center gap-1.5 flex-wrap leading-none">
           <h1 class="text-name font-bold text-text truncate">{{ participant.name }}</h1>
-          <Badge :text="participant.role" />
+          <Badge :text="participant.role" :tone="roleTone(participant.role)" />
         </div>
         <div class="text-meta text-muted mt-0.5 truncate">
           @{{ participant.username }} · {{ participant.city }} · с {{ participant.joinDate }}

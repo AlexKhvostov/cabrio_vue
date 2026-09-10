@@ -19,6 +19,37 @@ export function stars(n: number): string {
   return '⭐'.repeat(n) + '☆'.repeat(5 - n)
 }
 
+export function roleTone(role: string): 'muted' | 'accent2' | 'danger' {
+  if (role === 'Админ') return 'danger'
+  if (role === 'Модератор') return 'accent2'
+  return 'muted'
+}
+
+export function carStatusTone(status: string): 'success' | 'warning' | 'muted' {
+  if (status === 'В ремонте') return 'warning'
+  if (status === 'Продан') return 'muted'
+  return 'success'
+}
+
+export function eventWhenLabel(dateIso: string): string {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const target = new Date(dateIso)
+  target.setHours(0, 0, 0, 0)
+  const diffDays = Math.round((target.getTime() - today.getTime()) / 86400000)
+  if (diffDays === 0) return 'сегодня'
+  if (diffDays === 1) return 'завтра'
+  if (diffDays > 1) return `через ${diffDays} дн.`
+  if (diffDays === -1) return 'было вчера'
+  return `было ${Math.abs(diffDays)} дн. назад`
+}
+
+export function ratingTone(rating: number): 'success' | 'warning' | 'danger' {
+  if (rating >= 4) return 'success'
+  if (rating >= 2.5) return 'warning'
+  return 'danger'
+}
+
 export const ICONS = {
   event:
     '<svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>',

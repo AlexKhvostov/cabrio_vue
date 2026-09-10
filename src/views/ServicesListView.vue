@@ -8,9 +8,9 @@ const router = useRouter()
 const search = ref('')
 
 const places = [
-  { id: 1, name: 'Мойка «Блеск»', city: 'Минск', avgRating: 5, reviewsCount: 12, photo: 'https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?w=200&h=200&fit=crop' },
-  { id: 2, name: 'СТО «АвтоПро»', city: 'Минск', avgRating: 4, reviewsCount: 8, photo: 'https://images.unsplash.com/photo-1493238792000-8113da705763?w=200&h=200&fit=crop' },
-  { id: 3, name: 'Шиномонтаж «Колесо»', city: 'Гродно', avgRating: 5, reviewsCount: 5, photo: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=200&h=200&fit=crop' },
+  { id: 1, name: 'Мойка «Блеск»', city: 'Минск', avgRating: 5, reviewsCount: 12, photo: 'https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?w=200&h=200&fit=crop', tags: ['мойка', 'минск', 'ручная'] },
+  { id: 2, name: 'СТО «АвтоПро»', city: 'Минск', avgRating: 4, reviewsCount: 8, photo: 'https://images.unsplash.com/photo-1493238792000-8113da705763?w=200&h=200&fit=crop', tags: ['сто', 'ремонт'] },
+  { id: 3, name: 'Шиномонтаж «Колесо»', city: 'Гродно', avgRating: 2, reviewsCount: 5, photo: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=200&h=200&fit=crop', tags: ['шиномонтаж'] },
 ]
 
 const filtered = computed(() => places.filter((p) => p.name.toLowerCase().includes(search.value.toLowerCase())))

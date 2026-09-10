@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PageHeader, Badge, InfoRow, Section, EntityLinkRow, Avatar } from '@/components/ui'
+import { PageHeader, Badge, InfoRow, Section, EntityLinkRow, Avatar, carStatusTone } from '@/components/ui'
 
 const car = {
   brand: 'BMW',
@@ -24,7 +24,7 @@ const car = {
 
     <figure class="relative rounded-2xl overflow-hidden mb-2.5">
       <img :src="car.photo" class="w-full h-40 object-cover" />
-      <Badge :text="car.status" class="absolute top-2 right-2" />
+      <Badge :text="car.status" :tone="carStatusTone(car.status)" class="absolute top-2 right-2" />
     </figure>
 
     <div class="flex items-center justify-between px-1">

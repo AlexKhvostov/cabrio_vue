@@ -8,9 +8,9 @@ const router = useRouter()
 const search = ref('')
 
 const events = [
-  { id: 1, name: 'Слёт кабриолетов', date: '12 июня', time: '18:00', city: 'Нарочь', location: 'база отдыха «Волна»', type: 'слёт', photo: 'https://images.unsplash.com/photo-1541447271487-09612b3f49f7?w=500&h=300&fit=crop' },
-  { id: 2, name: 'Пикник на Заславском вдхр.', date: '28 мая', time: '16:00', city: 'Заславль', location: 'пляж', type: 'пикник', photo: 'https://images.unsplash.com/photo-1533106418989-88406c7cc8ca?w=500&h=300&fit=crop' },
-  { id: 3, name: 'Ночной заезд', date: '3 мая', time: '22:00', city: 'Минск', location: 'проспект Победителей', type: 'заезд', photo: 'https://images.unsplash.com/photo-1493238792000-8113da705763?w=500&h=300&fit=crop' },
+  { id: 1, name: 'Слёт кабриолетов', date: '12 июня', dateIso: '2026-06-12', time: '18:00', city: 'Нарочь', location: 'база отдыха «Волна»', type: 'слёт', photo: 'https://images.unsplash.com/photo-1541447271487-09612b3f49f7?w=500&h=300&fit=crop', going: 2, maybe: 1, limit: 40 },
+  { id: 2, name: 'Пикник на Заславском вдхр.', date: '28 мая', dateIso: '2026-05-28', time: '16:00', city: 'Заславль', location: 'пляж', type: 'пикник', photo: 'https://images.unsplash.com/photo-1533106418989-88406c7cc8ca?w=500&h=300&fit=crop', going: 8, maybe: 3, limit: 20 },
+  { id: 3, name: 'Ночной заезд', date: '3 мая', dateIso: '2026-05-03', time: '22:00', city: 'Минск', location: 'проспект Победителей', type: 'заезд', photo: 'https://images.unsplash.com/photo-1493238792000-8113da705763?w=500&h=300&fit=crop', going: 5, maybe: 0, limit: 15 },
 ]
 
 const filtered = computed(() => events.filter((e) => e.name.toLowerCase().includes(search.value.toLowerCase())))

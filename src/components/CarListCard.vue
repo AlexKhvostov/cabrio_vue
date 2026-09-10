@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import { Avatar, Badge } from '@/components/ui'
+import { Avatar, Badge, carStatusTone } from '@/components/ui'
 
 defineProps<{
-  car: { name: string; year: number; city: string; owner: string; ownerAvatar: string; photo: string }
+  car: { name: string; year: number; city: string; owner: string; ownerAvatar: string; photo: string; status?: string }
 }>()
 defineEmits<{ click: [] }>()
 </script>
 
 <template>
   <div class="card mb-2.5" @click="$emit('click')">
-    <img :src="car.photo" class="w-full h-32 object-cover" />
+    <div class="relative">
+      <img :src="car.photo" class="w-full h-32 object-cover" />
+      <Badge v-if="car.status" :text="car.status" :tone="carStatusTone(car.status)" class="absolute top-2 right-2" />
+    </div>
     <div class="flex items-center justify-between px-3 py-2">
       <div class="min-w-0">
         <div class="text-name font-bold text-text truncate">{{ car.name }}</div>

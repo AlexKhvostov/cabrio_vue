@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { PageHeader, Badge, EditableField, Section, CarMiniCard, EntityLinkRow, BottomNav, stars, ICONS } from '@/components/ui'
+import { PageHeader, Badge, EditableField, Section, CarMiniCard, EntityLinkRow, BottomNav, stars, ICONS, roleTone } from '@/components/ui'
 
 const router = useRouter()
 const editing = ref(false)
@@ -72,7 +72,7 @@ function saveEdit() {
       <div class="min-w-0 flex-1">
         <div class="flex items-center gap-1.5 flex-wrap leading-none">
           <h1 class="text-name font-bold text-text truncate">{{ profile.firstName }} {{ profile.lastName }}</h1>
-          <Badge :text="profile.role" />
+          <Badge :text="profile.role" :tone="roleTone(profile.role)" />
         </div>
         <div class="text-meta text-muted mt-0.5 truncate">@{{ profile.username }}</div>
       </div>
@@ -102,6 +102,13 @@ function saveEdit() {
     <Section title="Мои автомобили" :count="cars.length">
       <div class="flex gap-2 overflow-x-auto scrollbar-hide -mx-1 px-1">
         <CarMiniCard v-for="c in cars" :key="c.id" :car="c" @click="router.push(`/cars/${c.id}`)" />
+        <button
+          class="shrink-0 w-24 h-full min-h-[88px] rounded-xl border border-dashed border-white/15 flex flex-col items-center justify-center gap-1 text-muted"
+          @click="router.push('/cars')"
+        >
+          <span class="text-title leading-none">+</span>
+          <span class="text-micro text-center leading-tight px-1">Добавить авто</span>
+        </button>
       </div>
     </Section>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Avatar, Badge, CarPhotoStack } from '@/components/ui'
+import { Avatar, Badge, CarPhotoStack, roleTone } from '@/components/ui'
 
 defineProps<{
   member: {
@@ -21,7 +21,7 @@ defineEmits<{ click: [] }>()
     <div class="min-w-0 flex-1">
       <div class="flex items-center gap-1.5 leading-none">
         <span class="text-body font-bold text-text truncate">{{ member.name }}</span>
-        <Badge :text="member.role" />
+        <Badge :text="member.role" :tone="roleTone(member.role)" />
       </div>
       <div class="text-meta text-muted mt-0.5 truncate">@{{ member.username }} · {{ member.city }}</div>
       <div v-if="member.cars.length" class="text-label text-accent2 mt-0.5 truncate">
