@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { PageHeader, Badge, PrimaryButton, InfoRow, EntityLinkRow, CarMiniCard, Section, Avatar, stars, ICONS, roleTone } from '@/components/ui'
+import { PageHeader, Badge, PrimaryButton, InfoRow, EntityLinkRow, CarMiniCard, Section, Avatar, stars, ICONS, roleTone, BottomNav } from '@/components/ui'
 
 const router = useRouter()
 
@@ -33,7 +33,7 @@ const participant = {
 </script>
 
 <template>
-  <div class="page-shell">
+  <div class="page-shell pb-16">
     <PageHeader />
 
     <div class="flex items-center gap-2.5">
@@ -92,5 +92,7 @@ const participant = {
         />
       </div>
     </Section>
+
+    <BottomNav />
   </div>
 </template>

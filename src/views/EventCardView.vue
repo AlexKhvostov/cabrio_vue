@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import { PageHeader, Badge, InfoRow, EditableField, PrimaryButton, EntityLinkRow, Section, eventWhenLabel } from '@/components/ui'
+import { PageHeader, Badge, InfoRow, EditableField, PrimaryButton, EntityLinkRow, Section, eventWhenLabel, BottomNav } from '@/components/ui'
 
 const route = useRoute()
 const isNew = route.params.id === 'new'
@@ -59,7 +59,7 @@ function respond(status: 'going' | 'maybe') {
 </script>
 
 <template>
-  <div class="page-shell">
+  <div class="page-shell pb-16">
     <PageHeader>
       <template #actions>
         <div v-if="editing" class="flex gap-1.5">
@@ -149,5 +149,7 @@ function respond(status: 'going' | 'maybe') {
     <div v-else class="mt-3">
       <PrimaryButton label="Создать мероприятие" @click="saveEdit" />
     </div>
+
+    <BottomNav />
   </div>
 </template>

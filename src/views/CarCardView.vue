@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PageHeader, Badge, InfoRow, Section, EntityLinkRow, Avatar, carStatusTone } from '@/components/ui'
+import { PageHeader, Badge, InfoRow, Section, EntityLinkRow, Avatar, carStatusTone, BottomNav } from '@/components/ui'
 
 const car = {
   brand: 'BMW',
@@ -19,7 +19,7 @@ const car = {
 </script>
 
 <template>
-  <div class="page-shell">
+  <div class="page-shell pb-16">
     <PageHeader />
 
     <figure class="relative rounded-2xl overflow-hidden mb-2.5">
@@ -57,5 +57,7 @@ const car = {
       <div class="text-meta text-muted mb-0.5">Описание</div>
       <p class="text-body text-text leading-snug">{{ car.description }}</p>
     </div>
+
+    <BottomNav />
   </div>
 </template>

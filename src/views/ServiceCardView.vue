@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { PageHeader, Badge, InfoRow, PrimaryButton, Section, StarRating, ratingTone } from '@/components/ui'
+import { PageHeader, Badge, InfoRow, PrimaryButton, Section, StarRating, ratingTone, BottomNav } from '@/components/ui'
 
 const showForm = ref(false)
 const newReview = reactive({ quality: 5, speed: 5, price: 5, text: '' })
@@ -34,7 +34,7 @@ function submitReview() {
 </script>
 
 <template>
-  <div class="page-shell">
+  <div class="page-shell pb-16">
     <PageHeader />
 
     <figure class="relative rounded-2xl overflow-hidden mb-2.5">
@@ -107,5 +107,7 @@ function submitReview() {
     <div v-else class="mt-3">
       <PrimaryButton label="Оставить отзыв" @click="showForm = true" />
     </div>
+
+    <BottomNav />
   </div>
 </template>
