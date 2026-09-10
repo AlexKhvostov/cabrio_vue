@@ -23,12 +23,12 @@ const event = reactive({
 })
 let snapshot = { ...event }
 
-const going = [
-  { id: 1, name: 'Иван Петров' },
-  { id: 2, name: 'Алексей Ковалёв' },
-]
-const maybeList = [{ id: 3, name: 'Ольга Смирнова' }]
-const notGoing = [{ id: 4, name: 'Мария Волк' }]
+const going = ref([
+  { id: 1, name: 'Иван Петров', plusOne: false },
+  { id: 2, name: 'Алексей Ковалёв', plusOne: true },
+])
+const maybeList = ref([{ id: 3, name: 'Ольга Смирнова' }])
+const notGoing = ref([{ id: 4, name: 'Мария Волк' }])
 
 function startEdit() {
   snapshot = { ...event }
@@ -43,19 +43,51 @@ function saveEdit() {
 }
 
 const whenLabel = eventWhenLabel(event.dateIso)
-const takenSeats = computed(() => going.length)
-const tabs = ['Едут', 'Думают', 'Не едут'] as const
-const activeTab = ref<(typeof tabs)[number]>('Едут')
-const tabList = computed(() => {
-  if (activeTab.value === 'Едут') return going
-  if (activeTab.value === 'Думают') return maybeList
-  return notGoing
-})
-const myStatus = ref<'going' | 'maybe' | null>('going')
 
-function respond(status: 'going' | 'maybe') {
-  myStatus.value = myStatus.value === status ? null : status
+const myStatus = ref<'yes' | 'maybe' | 'no' | ''>('yes')
+const plusOne = ref(false)
+const me = { id: 0, name: 'Вы' }
+
+function removeMeFromAll() {
+  going.value = going.value.filter((p) => p.id !== me.id)
+  maybeList.value = maybeList.value.filter((p) => p.id !== me.id)
+  notGoing.value = notGoing.value.filter((p) => p.id !== me.id)
 }
+
+function respond(status: 'yes' | 'maybe' | 'no') {
+  myStatus.value = status
+  removeMeFromAll()
+  if (status === 'yes') going.value.unshift({ ...me, plusOne: plusOne.value })
+  if (status === 'maybe') maybeList.value.unshift({ ...me })
+  if (status === 'no') notGoing.value.unshift({ ...me })
+}
+
+function togglePlusOne() {
+  plusOne.value = !plusOne.value
+  if (myStatus.value === 'yes') {
+    const idx = going.value.findIndex((p) => p.id === me.id)
+    if (idx !== -1) going.value[idx].plusOne = plusOne.value
+  }
+}
+
+const takenSeats = computed(() => going.value.length)
+const totalAnswered = computed(() => going.value.length + maybeList.value.length + notGoing.value.length)
+const occupancyPct = computed(() =>
+  event.limit > 0 ? Math.min(100, Math.round((takenSeats.value / event.limit) * 100)) : 0
+)
+const spotsLeft = computed(() => (event.limit > 0 ? Math.max(0, event.limit - takenSeats.value) : null))
+const capacityCaption = computed(() => {
+  if (!event.limit) return 'лимита нет'
+  return spotsLeft.value === 0
+    ? `мест нет · ${takenSeats.value} из ${event.limit}`
+    : `занято ${takenSeats.value} из ${event.limit} · свободно ${spotsLeft.value}`
+})
+const myCaption = computed(() => {
+  if (myStatus.value === 'yes') return plusOne.value ? 'вы едете +1' : 'вы едете'
+  if (myStatus.value === 'maybe') return 'вы думаете'
+  if (myStatus.value === 'no') return 'вы не едете'
+  return ''
+})
 </script>
 
 <template>
@@ -103,47 +135,83 @@ function respond(status: 'going' | 'maybe') {
 
     <template v-if="!isNew">
       <div class="card mt-2.5 px-3 py-2.5">
-        <div class="flex items-center justify-between mb-1.5">
-          <span class="text-meta text-muted">Регистрация</span>
-          <span class="text-meta font-semibold text-text">{{ takenSeats }} / {{ event.limit }} мест</span>
+        <div class="text-meta text-muted uppercase tracking-wide text-micro font-bold mb-1.5">Регистрация</div>
+        <div class="grid grid-cols-3 gap-2 text-center mb-2">
+          <div class="rounded-xl bg-emerald-500/10 py-1.5">
+            <div class="text-title font-extrabold text-emerald-400">{{ going.length }}</div>
+            <div class="text-micro text-muted">едут</div>
+          </div>
+          <div class="rounded-xl bg-amber-500/10 py-1.5">
+            <div class="text-title font-extrabold text-amber-400">{{ maybeList.length }}</div>
+            <div class="text-micro text-muted">думают</div>
+          </div>
+          <div class="rounded-xl bg-rose-500/10 py-1.5">
+            <div class="text-title font-extrabold text-rose-400">{{ notGoing.length }}</div>
+            <div class="text-micro text-muted">нет</div>
+          </div>
         </div>
-        <div class="h-1.5 rounded-full bg-white/10 overflow-hidden mb-2">
-          <div class="h-full bg-accent" :style="{ width: Math.min(100, (takenSeats / event.limit) * 100) + '%' }" />
+        <div v-if="event.limit" class="h-1.5 rounded-full bg-white/10 overflow-hidden mb-1.5">
+          <div class="h-full bg-accent" :style="{ width: occupancyPct + '%' }" />
         </div>
-        <div class="flex items-center gap-3 text-meta text-muted">
-          <span>🚗 едут: {{ going.length }}</span>
-          <span>🤔 думают: {{ maybeList.length }}</span>
-          <span>❌ не едут: {{ notGoing.length }}</span>
-        </div>
-        <p v-if="myStatus" class="text-label text-accent mt-1.5">
-          {{ myStatus === 'going' ? 'Вы едете на это мероприятие' : 'Вы отметили «думаю»' }}
+        <p class="text-label text-muted">
+          {{ capacityCaption }}<span v-if="myCaption"> · {{ myCaption }}</span>
         </p>
       </div>
 
-      <Section :title="'Кто ответил'" :count="going.length + maybeList.length + notGoing.length">
-        <div class="flex gap-1.5 mb-1.5 px-1">
+      <div class="card mt-2.5 px-3 py-2.5">
+        <div class="text-meta text-muted uppercase tracking-wide text-micro font-bold mb-1.5">Ваш ответ</div>
+        <div class="grid grid-cols-3 gap-1.5">
           <button
-            v-for="t in tabs"
-            :key="t"
-            class="px-2.5 py-1 rounded-full text-meta font-semibold"
-            :class="activeTab === t ? 'bg-accent text-bg' : 'bg-white/5 text-muted'"
-            @click="activeTab = t"
+            class="rounded-xl py-1.5 text-meta font-semibold"
+            :class="myStatus === 'yes' ? 'bg-accent text-bg' : 'bg-white/5 text-muted'"
+            @click="respond('yes')"
           >
-            {{ t }}
+            Да
+          </button>
+          <button
+            class="rounded-xl py-1.5 text-meta font-semibold"
+            :class="myStatus === 'maybe' ? 'bg-accent text-bg' : 'bg-white/5 text-muted'"
+            @click="respond('maybe')"
+          >
+            Возможно
+          </button>
+          <button
+            class="rounded-xl py-1.5 text-meta font-semibold"
+            :class="myStatus === 'no' ? 'bg-accent text-bg' : 'bg-white/5 text-muted'"
+            @click="respond('no')"
+          >
+            Нет
           </button>
         </div>
-        <div class="card">
-          <EntityLinkRow v-for="p in tabList" :key="p.id" :title="p.name" meta="участник" icon="" />
-          <div v-if="!tabList.length" class="px-3 py-2 text-meta text-muted">не указано</div>
+        <label v-if="myStatus === 'yes'" class="flex items-center gap-1.5 mt-2 text-meta text-text">
+          <input type="checkbox" :checked="plusOne" @change="togglePlusOne" />
+          +1 гость
+        </label>
+      </div>
+
+      <Section :title="'Кто ответил'" :count="totalAnswered">
+        <div class="card divide-y divide-white/5">
+          <div v-if="going.length" class="px-3 py-2">
+            <div class="text-meta text-emerald-400 font-semibold mb-1">Едут · {{ going.length }}</div>
+            <EntityLinkRow
+              v-for="p in going"
+              :key="p.id"
+              :title="p.name"
+              :meta="p.plusOne ? '+1 гость' : 'участник'"
+              icon=""
+            />
+          </div>
+          <div v-if="maybeList.length" class="px-3 py-2">
+            <div class="text-meta text-amber-400 font-semibold mb-1">Думают · {{ maybeList.length }}</div>
+            <EntityLinkRow v-for="p in maybeList" :key="p.id" :title="p.name" meta="участник" icon="" />
+          </div>
+          <div v-if="notGoing.length" class="px-3 py-2">
+            <div class="text-meta text-rose-400 font-semibold mb-1">Не едут · {{ notGoing.length }}</div>
+            <EntityLinkRow v-for="p in notGoing" :key="p.id" :title="p.name" meta="участник" icon="" />
+          </div>
+          <div v-if="!totalAnswered" class="px-3 py-2 text-meta text-muted">Пока никто не ответил</div>
         </div>
       </Section>
-
-      <div class="mt-3 flex gap-2">
-        <div class="flex-1">
-          <PrimaryButton :label="myStatus === 'going' ? '✓ Еду' : 'Пойду'" @click="respond('going')" />
-        </div>
-        <PrimaryButton :label="myStatus === 'maybe' ? '✓ Думаю' : 'Думаю'" size="sm" @click="respond('maybe')" />
-      </div>
     </template>
 
     <div v-else class="mt-3">
