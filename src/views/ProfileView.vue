@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { PageHeader, Badge, EditableField, Section, CarMiniCard, BottomNav } from '@/components/ui'
+import { PageHeader, Badge, EditableField, Section, CarMiniCard, EntityLinkRow, BottomNav, stars, ICONS } from '@/components/ui'
 
 const router = useRouter()
 const editing = ref(false)
@@ -23,6 +23,16 @@ let snapshot = { ...profile }
 const cars = [
   { id: 1, name: 'BMW Z4', year: 2019, photo: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=300&h=200&fit=crop' },
   { id: 2, name: 'Mazda MX-5', year: 2021, photo: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=300&h=200&fit=crop' },
+]
+
+const myEvents = [
+  { id: 1, title: 'Слёт кабриолетов', date: '12 июня', place: 'Нарочь' },
+  { id: 2, title: 'Пикник на Заславском вдхр.', date: '28 мая', place: 'Заславль' },
+]
+
+const myReviews = [
+  { id: 1, title: 'Мойка «Блеск»', rating: 5 },
+  { id: 2, title: 'СТО «АвтоПро»', rating: 4 },
 ]
 
 function startEdit() {
@@ -92,6 +102,32 @@ function saveEdit() {
     <Section title="Мои автомобили" :count="cars.length">
       <div class="flex gap-2 overflow-x-auto scrollbar-hide -mx-1 px-1">
         <CarMiniCard v-for="c in cars" :key="c.id" :car="c" @click="router.push(`/cars/${c.id}`)" />
+      </div>
+    </Section>
+
+    <Section title="Мои мероприятия" :count="myEvents.length">
+      <div class="card">
+        <EntityLinkRow
+          v-for="e in myEvents"
+          :key="e.id"
+          :title="e.title"
+          :meta="e.date + ' · ' + e.place"
+          :icon="ICONS.event"
+          @click="router.push(`/events/${e.id}`)"
+        />
+      </div>
+    </Section>
+
+    <Section title="Мои отзывы" :count="myReviews.length">
+      <div class="card">
+        <EntityLinkRow
+          v-for="r in myReviews"
+          :key="r.id"
+          :title="r.title"
+          :meta="stars(r.rating)"
+          :icon="ICONS.review"
+          @click="router.push(`/services/${r.id}`)"
+        />
       </div>
     </Section>
 

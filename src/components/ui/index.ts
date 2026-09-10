@@ -13,6 +13,7 @@ export { default as SearchFilterBar } from './SearchFilterBar.vue'
 export { default as StatTile } from './StatTile.vue'
 export { default as StarRating } from './StarRating.vue'
 export { default as EditableField } from './EditableField.vue'
+export { default as CarPhotoStack } from './CarPhotoStack.vue'
 
 export function stars(n: number): string {
   return '⭐'.repeat(n) + '☆'.repeat(5 - n)

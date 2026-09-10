@@ -7,11 +7,57 @@ import MemberListCard from '@/components/MemberListCard.vue'
 const router = useRouter()
 const search = ref('')
 
+const bmwPhoto = 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=200&h=200&fit=crop'
+const mazdaPhoto = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=200&h=200&fit=crop'
+const audiPhoto = 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=200&h=200&fit=crop'
+const miniPhoto = 'https://images.unsplash.com/photo-1493238792000-8113da705763?w=200&h=200&fit=crop'
+const porschePhoto = 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=200&h=200&fit=crop'
+
 const members = [
-  { id: 1, name: 'Иван Петров', username: 'ivan_cabrio', role: 'Участник', city: 'Минск', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop', carBrands: 'BMW · Mazda' },
-  { id: 2, name: 'Ольга Смирнова', username: 'olga_tt', role: 'Модератор', city: 'Минск', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop', carBrands: 'Audi' },
-  { id: 3, name: 'Алексей Ковалёв', username: 'alex_kovalev', role: 'Участник', city: 'Гродно', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop', carBrands: 'Mini Cooper' },
-  { id: 4, name: 'Мария Волк', username: 'maria_v', role: 'Пользователь', city: 'Брест', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop', carBrands: '' },
+  {
+    id: 1,
+    name: 'Иван Петров',
+    username: 'ivan_cabrio',
+    role: 'Участник',
+    city: 'Минск',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+    cars: [
+      { id: 1, brand: 'BMW', photo: bmwPhoto },
+      { id: 2, brand: 'Mazda', photo: mazdaPhoto },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Ольга Смирнова',
+    username: 'olga_tt',
+    role: 'Модератор',
+    city: 'Минск',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+    cars: [
+      { id: 3, brand: 'Audi', photo: audiPhoto },
+      { id: 4, brand: 'Mini', photo: miniPhoto },
+      { id: 5, brand: 'Porsche', photo: porschePhoto },
+      { id: 6, brand: 'BMW', photo: bmwPhoto },
+    ],
+  },
+  {
+    id: 3,
+    name: 'Алексей Ковалёв',
+    username: 'alex_kovalev',
+    role: 'Участник',
+    city: 'Гродно',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+    cars: [{ id: 7, brand: 'Mini Cooper', photo: miniPhoto }],
+  },
+  {
+    id: 4,
+    name: 'Мария Волк',
+    username: 'maria_v',
+    role: 'Пользователь',
+    city: 'Брест',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+    cars: [],
+  },
 ]
 
 const filtered = computed(() =>
